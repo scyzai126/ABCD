@@ -4,17 +4,6 @@ The ABCD B-cell database runs as a Postgres 16 container defined in
 [`../docker-compose.yml`](../docker-compose.yml). `abcd_test.dump` is restored
 into it automatically on first boot.
 
-## Getting the data
-
-**`abcd_test.dump` is not distributed with this repository.** It holds unpublished
-lab data, so it is deliberately gitignored. Obtain it from the ABCD project and put
-it at `database/abcd_test.dump` before starting the stack.
-
-Without it, `docker compose up -d` will appear to start and then fail during restore:
-Compose bind-mounts that path, so a missing file becomes an empty *directory* inside
-the container and `pg_restore` errors out. If you see that, the dump is what is
-missing.
-
 ## Requirements
 
 Docker. This machine uses **Colima** (a lightweight CLI-only Docker engine) rather

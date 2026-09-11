@@ -21,10 +21,6 @@ docker compose up -d          # database only
 docker compose ps             # should read "healthy"
 ```
 
-**The dump is not in this repository.** `database/abcd_test.dump` holds unpublished
-lab data and is gitignored; obtain it separately and place it there first, or the
-restore step fails. See [`database/README.md`](database/README.md#getting-the-data).
-
 **Everything in Docker** -- the portal on <http://localhost:8080>, the API on
 <http://localhost:8000/docs>:
 
