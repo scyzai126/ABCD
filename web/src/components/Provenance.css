@@ -1,0 +1,15 @@
+/* A mark, not a badge: it reports on the number beside it and must never compete
+   with the data. Only "not available" takes colour -- it means a figure the
+   reader expected is deliberately absent. */
+.provenance {
+  font-size: var(--t-micro);
+  color: var(--ink-muted);
+  border-bottom: 1px dotted var(--rule-strong);
+  cursor: help;
+  white-space: nowrap;
+}
+
+.provenance--unavailable {
+  color: var(--status-critical);
+  border-bottom-color: currentColor;
+}

@@ -1,0 +1,90 @@
+/* Blocks sit on the plane; the ground between them does the separating. No
+   outline, no drawn shadow -- a step of elevation is enough on a dark ground,
+   and the varied spans below keep this from reading as a grid of identical cards. */
+.panel {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--surface);
+  border-radius: var(--radius-block);
+}
+
+.panel__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-5) var(--space-4);
+}
+
+.panel__titles {
+  min-width: 0;
+}
+
+.panel__title {
+  font-size: var(--t-panel);
+  font-weight: 600;
+}
+
+.panel__subtitle {
+  margin: 3px 0 0;
+  font-size: var(--t-small);
+  color: var(--ink-muted);
+}
+
+.panel__tools {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-shrink: 0;
+}
+
+.panel__toggle {
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  background: var(--surface-input);
+  border-radius: var(--radius-control);
+}
+
+.panel__toggle button {
+  padding: 3px 9px;
+  font: inherit;
+  font-size: var(--t-micro);
+  color: var(--ink-muted);
+  background: transparent;
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 120ms var(--ease), color 120ms var(--ease);
+}
+
+.panel__toggle button:hover {
+  color: var(--ink);
+}
+
+.panel__toggle button[aria-pressed="true"] {
+  background: var(--surface-raised);
+  color: var(--ink);
+}
+
+.panel__body {
+  flex: 1;
+  padding: 0 var(--space-5) var(--space-5);
+  transition: opacity 140ms var(--ease);
+}
+
+/* Refetch holds the previous render rather than flashing a skeleton. */
+.panel__body--stale {
+  opacity: 0.4;
+}
+
+.panel__note {
+  margin: 0;
+  padding: var(--space-4) var(--space-5);
+  border-top: 1px solid var(--rule);
+  font-size: var(--t-small);
+  line-height: 1.55;
+  color: var(--ink-muted);
+  max-width: 72ch;
+}

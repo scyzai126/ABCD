@@ -1,0 +1,24 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "ABCD (admin)",
+      "Group": "ABCD",
+      "Host": "localhost",
+      "Port": 5432,
+      "MaintenanceDB": "abcd",
+      "Username": "postgres",
+      "SSLMode": "prefer",
+      "Comment": "Superuser. Use for browsing schema, running DDL, migrations. Password: POSTGRES_PASSWORD in .env"
+    },
+    "2": {
+      "Name": "ABCD (app, read-only)",
+      "Group": "ABCD",
+      "Host": "localhost",
+      "Port": 5432,
+      "MaintenanceDB": "abcd",
+      "Username": "abcd_app",
+      "SSLMode": "prefer",
+      "Comment": "Read-only role the web app uses. Connect as this to sanity-check what the app can actually see. Password: ABCD_APP_PASSWORD in .env"
+    }
+  }
+}

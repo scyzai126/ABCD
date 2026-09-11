@@ -1,0 +1,70 @@
+.dash {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-width: 1480px;
+}
+
+.dash__head {
+  margin-bottom: var(--space-1);
+}
+
+.dash__title {
+  font-size: var(--t-page);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.dash__subtitle {
+  margin: var(--space-2) 0 0;
+  color: var(--ink-muted);
+  max-width: 68ch;
+}
+
+/* The opening chart is the subject of the page, so it sits directly on the plane
+   rather than inside a block -- the rest of the page is what lives in blocks. */
+.dash__lead {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-5) 0 var(--space-6);
+}
+
+.dash__lead-title {
+  font-size: var(--t-section);
+  font-weight: 600;
+}
+
+.dash__lead-sub {
+  margin: 4px 0 0;
+  font-size: var(--t-small);
+  color: var(--ink-muted);
+}
+
+.dash__grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.dash__note {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface-raised);
+  border-left: 2px solid var(--rule-strong);
+  border-radius: 0 var(--radius-control) var(--radius-control) 0;
+  font-size: var(--t-small);
+  line-height: 1.55;
+  color: var(--ink-muted);
+  max-width: 80ch;
+}
+
+.dash__loading {
+  color: var(--ink-muted);
+}
+
+@media (max-width: 1180px) {
+  .dash__grid > * {
+    grid-column: span 12 !important;
+  }
+}

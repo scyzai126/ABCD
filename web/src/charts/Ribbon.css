@@ -1,0 +1,128 @@
+.ribbon {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.ribbon__bar {
+  display: flex;
+  /* 2px of ground between segments -- the gap separates them, not a stroke. */
+  gap: 2px;
+  height: 18px;
+  border-radius: var(--radius-mark);
+  overflow: hidden;
+}
+
+.ribbon--lead .ribbon__bar {
+  /* Tall enough to lead the page, short enough to stay a measurement rather
+     than a field of colour. */
+  height: 22px;
+  border-radius: 5px;
+}
+
+.ribbon__segment {
+  display: block;
+  min-width: 3px;
+  transform-origin: left center;
+}
+
+/* The one unprompted animation on the page: the composition draws itself once,
+   left to right, the way the reader will read it. */
+.ribbon--lead .ribbon__segment {
+  animation: draw-in 620ms var(--ease) both;
+}
+
+.ribbon--lead .ribbon__segment:nth-child(2) {
+  animation-delay: 70ms;
+}
+
+.ribbon--lead .ribbon__segment:nth-child(3) {
+  animation-delay: 140ms;
+}
+
+.ribbon__segment:first-child {
+  border-radius: var(--radius-mark) 0 0 var(--radius-mark);
+}
+
+.ribbon__segment:last-child {
+  border-radius: 0 var(--radius-mark) var(--radius-mark) 0;
+}
+
+.ribbon__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-7);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ribbon__key {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  min-height: 26px;
+  padding: 2px var(--space-2) 2px var(--space-1);
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-control);
+  transition: background 120ms var(--ease);
+}
+
+button.ribbon__key {
+  cursor: pointer;
+}
+
+button.ribbon__key:hover {
+  background: var(--surface-raised);
+}
+
+.ribbon__key--on {
+  background: var(--surface-input);
+  box-shadow: inset 2px 0 0 var(--signal);
+}
+
+.ribbon__swatch {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  align-self: center;
+  flex-shrink: 0;
+}
+
+.ribbon__name {
+  font-size: var(--t-small);
+  color: var(--ink-muted);
+}
+
+.ribbon--lead .ribbon__name {
+  font-size: var(--t-body);
+  color: var(--ink-secondary);
+}
+
+.ribbon__value {
+  font-size: var(--t-body);
+  font-weight: 500;
+}
+
+.ribbon--lead .ribbon__value {
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  /* Proportional figures on a display number. */
+  font-variant-numeric: normal;
+}
+
+.ribbon__share {
+  font-family: var(--font-mono);
+  font-size: var(--t-small);
+  color: var(--ink-muted);
+}
+
+.ribbon__empty {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: var(--t-small);
+}

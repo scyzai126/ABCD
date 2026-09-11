@@ -1,0 +1,69 @@
+# ABCD B-cell database — local Postgres 16 instance.
+#
+# `docker compose up -d` creates the `abcd` database and restores
+# database/abcd_test.dump into it on first boot (see database/initdb/).
+# Data persists in the abcd_pgdata volume across restarts.
+#
+# NOTE: the image must be Debian-based, not `-alpine`. The dump's database was
+# created with LOCALE_PROVIDER=libc / LOCALE='en_US.UTF-8', which musl libc
+# (alpine) does not provide.
+
+services:
+  db:
+    image: postgres:16
+    container_name: abcd_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: abcd
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      # Consumed by initdb/02-app-role.sh to create the app's read-only role.
+      ABCD_APP_PASSWORD: ${ABCD_APP_PASSWORD:?set ABCD_APP_PASSWORD in .env}
+      # Matches the locale the dump was created under.
+      LANG: en_US.utf8
+    ports:
+      # Host 5432 -> container 5432. Change the left side to 5433 if something
+      # else already listens on 5432 locally.
+      - "5432:5432"
+    volumes:
+      - abcd_pgdata:/var/lib/postgresql/data
+      - ./database/initdb:/docker-entrypoint-initdb.d:ro
+      - ./database/abcd_test.dump:/dump/abcd_test.dump:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d abcd"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+
+  # The API and the web app sit behind a profile, so plain `docker compose up -d`
+  # still brings up just the database as before. Start the whole portal with:
+  #   docker compose --profile app up -d --build
+  api:
+    profiles: ["app"]
+    build: ./api
+    container_name: abcd_api
+    restart: unless-stopped
+    environment:
+      # Connects as the read-only role; there is no write path to lock down.
+      DATABASE_URL: postgresql://abcd_app:${ABCD_APP_PASSWORD:?set ABCD_APP_PASSWORD in .env}@db:5432/abcd
+      CORS_ORIGINS: http://localhost:8080
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+
+  web:
+    profiles: ["app"]
+    build: ./web
+    container_name: abcd_web
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "8080:80"
+
+volumes:
+  abcd_pgdata:

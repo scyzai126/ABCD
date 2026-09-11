@@ -1,0 +1,79 @@
+.barlist {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.barlist__hit {
+  display: grid;
+  grid-template-columns: minmax(7rem, 12rem) 1fr auto;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  /* The hit area is the whole row, well past the painted bar. */
+  min-height: 28px;
+  padding: 3px var(--space-2);
+  font: inherit;
+  text-align: left;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-control);
+  cursor: inherit;
+  transition: background 120ms var(--ease);
+}
+
+button.barlist__hit {
+  cursor: pointer;
+}
+
+.barlist__hit:hover {
+  background: var(--surface-raised);
+}
+
+.barlist__hit--on {
+  background: var(--surface-input);
+}
+
+.barlist__label {
+  font-size: var(--t-small);
+  color: var(--ink-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.barlist__hit--on .barlist__label,
+.barlist__hit:hover .barlist__label {
+  color: var(--ink);
+}
+
+.barlist__meta {
+  margin-left: var(--space-2);
+  color: var(--ink-muted);
+  font-size: var(--t-micro);
+}
+
+.barlist__track {
+  display: block;
+  min-width: 0;
+}
+
+/* Thin mark, square at the baseline, rounded at the data end. */
+.barlist__fill {
+  display: block;
+  height: 13px;
+  border-radius: 0 var(--radius-mark) var(--radius-mark) 0;
+  min-width: 2px;
+}
+
+.barlist__value {
+  font-family: var(--font-mono);
+  font-size: var(--t-small);
+  color: var(--ink);
+  min-width: 4.5rem;
+  text-align: right;
+}

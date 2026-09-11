@@ -1,0 +1,256 @@
+/* ---------------------------------------------------------------------------
+   ABCD console tokens.
+
+   Dark by default -- not for fashion: the chart palette's dark steps all clear
+   3:1 against this surface, while three of the light steps do not. The data
+   genuinely reads better here, so the dark theme is the primary one and light is
+   the alternate.
+
+   Two rules hold the surface together:
+     1. The ground does the separating. Depth and luminosity replace the hairline
+        boxes, so blocks sit on the plane instead of being drawn onto it.
+     2. Hue belongs to the data. Every control, selection and focus state is
+        achromatic, so a saturated colour anywhere always encodes a value.
+--------------------------------------------------------------------------- */
+
+:root {
+  color-scheme: dark;
+
+  /* Cool graphite, stepped by elevation rather than by outline. */
+  --plane: #0e1013;
+  --surface: #161a1f;
+  --surface-raised: #1e232a;
+  --surface-input: #262c35;
+
+  --rule: #252b33;
+  --rule-strong: #333b45;
+
+  --ink: #e9ecf1;
+  --ink-secondary: #a8b0bc;
+  --ink-muted: #6e7784;
+
+  /* Selection and focus are light-on-dark, never a tinted accent. */
+  --signal: #e9ecf1;
+  --signal-ink: #0e1013;
+
+  /* Categorical slots, dark steps. Re-validated against --surface: lightness
+     band, chroma floor, CVD separation, normal-vision floor and contrast all
+     pass. Do not restep these without re-running the validator. */
+  --series-1: #3987e5;
+  --series-2: #d95926;
+  --series-3: #199e70;
+  --series-4: #c98500;
+  --series-5: #d55181;
+
+  /* Fill steps for large areas -- ribbons, bars, boxes. Saturated colour belongs
+     on small marks; a full-strength slab reads as a block of paint rather than a
+     measurement. Legend swatches and markers keep the full-chroma steps above.
+     Re-validated against this surface: lightness band, chroma floor and contrast
+     all pass, and CVD separation passes at three slots. */
+  --series-1-fill: #3373c1;
+  --series-2-fill: #b64e25;
+  --series-3-fill: #188661;
+  --series-4-fill: #a97206;
+  --series-5-fill: #b3476f;
+
+  --status-warning: #fab219;
+  --status-critical: #e06a6a;
+
+  --font-sans: Archivo, system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* Mono is for machine identifiers and columns of figures -- IGHV4-30-4*10 has
+     to align to be scannable. It never dresses ordinary labels. */
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --t-micro: 0.6875rem;
+  --t-small: 0.78125rem;
+  --t-body: 0.875rem;
+  --t-panel: 1rem;
+  --t-section: 1.25rem;
+  --t-page: 1.875rem;
+  --t-figure: 1.75rem;
+  --t-hero: 2.5rem;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  --radius-block: 10px;
+  --radius-control: 6px;
+  --radius-mark: 4px;
+
+  --rail-width: 244px;
+
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* The alternate theme. Roles swap consistently; nothing is redefined only here. */
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --plane: #f4f5f7;
+  --surface: #ffffff;
+  --surface-raised: #f4f5f7;
+  --surface-input: #eceef1;
+
+  --rule: #e3e6ea;
+  --rule-strong: #c9cdd4;
+
+  --ink: #11151a;
+  --ink-secondary: #4d5561;
+  --ink-muted: #7b828d;
+
+  --signal: #11151a;
+  --signal-ink: #ffffff;
+
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --series-3: #1baf7a;
+  --series-4: #eda100;
+  --series-5: #e87ba4;
+
+  /* Softened toward the white surface. Yellow is deliberately NOT softened: at
+     any lighter step it leaves the lightness band, and it is already the palette's
+     quietest slot. The four that are softened sit below 3:1, which the relief rule
+     permits because every segment and bar carries a visible value label and every
+     panel has a table view. */
+  --series-1-fill: #4488db;
+  --series-2-fill: #ed7a4c;
+  --series-3-fill: #36b98a;
+  --series-4-fill: #eda100;
+  --series-5-fill: #eb8baf;
+
+  --status-critical: #d03b3b;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+
+    --plane: #f4f5f7;
+    --surface: #ffffff;
+    --surface-raised: #f4f5f7;
+    --surface-input: #eceef1;
+
+    --rule: #e3e6ea;
+    --rule-strong: #c9cdd4;
+
+    --ink: #11151a;
+    --ink-secondary: #4d5561;
+    --ink-muted: #7b828d;
+
+    --signal: #11151a;
+    --signal-ink: #ffffff;
+
+    --series-1: #2a78d6;
+    --series-2: #eb6834;
+    --series-3: #1baf7a;
+    --series-4: #eda100;
+    --series-5: #e87ba4;
+
+    --series-1-fill: #4488db;
+    --series-2-fill: #ed7a4c;
+    --series-3-fill: #36b98a;
+    --series-4-fill: #eda100;
+    --series-5-fill: #eb8baf;
+
+    --status-critical: #d03b3b;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--plane);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--t-body);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
+:where(a, button, input, select, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 2px;
+  border-radius: var(--radius-mark);
+}
+
+::selection {
+  background: var(--signal);
+  color: var(--signal-ink);
+}
+
+/* Scrollbars are chrome; keep them recessive rather than default-bright. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--rule-strong) transparent;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.95em;
+  letter-spacing: -0.01em;
+}
+
+/* Columns of figures align. Standalone display figures keep proportional widths
+   -- equal-width digits make a large number look loose. */
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* One orchestrated moment: the composition ribbon draws itself once on load.
+   Nothing else on the page animates unprompted. */
+@keyframes draw-in {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

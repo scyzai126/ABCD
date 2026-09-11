@@ -1,0 +1,56 @@
+/* One readout strip rather than nine boxes: the figures share a plane and the
+   eye runs across them, which is how a row of counts is actually read. */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(104px, 1fr));
+  gap: var(--space-5) var(--space-2);
+  margin: 0;
+  padding: var(--space-5);
+  background: var(--surface);
+  border-radius: var(--radius-block);
+}
+
+.stats__tile {
+  min-width: 0;
+  padding-left: var(--space-4);
+  border-left: 1px solid var(--rule);
+}
+
+.stats__tile:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.stats__label {
+  font-size: var(--t-micro);
+  color: var(--ink-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stats__value {
+  margin: 4px 0 0;
+  font-size: var(--t-figure);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  /* Proportional figures: a display number should not be padded to digit width. */
+  font-variant-numeric: normal;
+}
+
+.stats__mark {
+  min-height: 14px;
+  margin-top: 2px;
+}
+
+@media (max-width: 760px) {
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .stats__tile:nth-child(odd) {
+    padding-left: 0;
+    border-left: 0;
+  }
+}

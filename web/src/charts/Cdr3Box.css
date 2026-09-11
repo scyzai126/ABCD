@@ -1,0 +1,162 @@
+.cdr3 {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.cdr3__controls {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.cdr3__toggle {
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  background: var(--surface-input);
+  border-radius: var(--radius-control);
+}
+
+.cdr3__toggle button {
+  padding: 3px 9px;
+  font: inherit;
+  font-size: var(--t-micro);
+  color: var(--ink-muted);
+  background: transparent;
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 120ms var(--ease), color 120ms var(--ease);
+}
+
+.cdr3__toggle button:hover {
+  color: var(--ink);
+}
+
+.cdr3__toggle button[aria-pressed="true"] {
+  background: var(--surface-raised);
+  color: var(--ink);
+}
+
+.cdr3__rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cdr3__row,
+.cdr3__axis {
+  display: grid;
+  grid-template-columns: 3rem 1fr 3.5rem;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.cdr3__chain {
+  font-size: var(--t-small);
+  font-weight: 500;
+  color: var(--ink-secondary);
+}
+
+.cdr3__track:hover ~ .cdr3__median-value,
+.cdr3__row:hover .cdr3__chain {
+  color: var(--ink);
+}
+
+.cdr3__track {
+  position: relative;
+  display: block;
+  height: 28px;
+}
+
+.cdr3__grid {
+  position: absolute;
+  inset: 0;
+}
+
+/* Hairline, solid, one step off the surface -- never dashed. */
+.cdr3__gridline {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--rule);
+}
+
+.cdr3__whisker {
+  position: absolute;
+  top: 50%;
+  height: 2px;
+  transform: translateY(-50%);
+  background: var(--rule-strong);
+  border-radius: 1px;
+}
+
+.cdr3__box {
+  position: absolute;
+  top: 50%;
+  height: 16px;
+  transform: translateY(-50%);
+  border-radius: 3px;
+}
+
+.cdr3__median {
+  position: absolute;
+  top: 50%;
+  width: 2px;
+  height: 22px;
+  transform: translate(-1px, -50%);
+  background: var(--surface);
+}
+
+.cdr3__box {
+  border-radius: var(--radius-mark);
+}
+
+/* 8px marker with a 2px surface ring so it stays legible over the box. */
+.cdr3__mean {
+  position: absolute;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  transform: translate(-4px, -50%);
+  border-radius: 50%;
+  background: var(--ink);
+  /* 2px ring in the surface colour so the marker survives crossing the box. */
+  box-shadow: 0 0 0 2px var(--surface);
+}
+
+.cdr3__median-value {
+  font-family: var(--font-mono);
+  font-size: var(--t-small);
+  text-align: right;
+  color: var(--ink);
+}
+
+.cdr3__axis-track {
+  position: relative;
+  display: block;
+  height: 16px;
+  border-top: 1px solid var(--rule-strong);
+}
+
+.cdr3__tick {
+  position: absolute;
+  top: 2px;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  color: var(--ink-muted);
+}
+
+.cdr3__key,
+.cdr3__empty {
+  margin: 0;
+  font-size: var(--t-small);
+  line-height: 1.5;
+  color: var(--ink-muted);
+  max-width: 62ch;
+}

@@ -1,0 +1,20 @@
+.env
+.DS_Store
+
+# Deliberately not published: the lab's unpublished aggregate data. Obtain the
+# dump separately and place it here -- see database/README.md.
+database/abcd_test.dump
+
+# Deliberately not published: internal project planning decks.
+document/*.pptx
+
+# API
+api/.env
+api/.venv/
+api/__pycache__/
+api/**/__pycache__/
+api/.pytest_cache/
+
+# Web
+web/node_modules/
+web/dist/
