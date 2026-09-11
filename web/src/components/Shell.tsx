@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { api } from "../api/client";
-import { countActive } from "../state/filters";
-import { useFilters } from "../state/FilterProvider";
 import { useAsync } from "../state/useAsync";
-import { CommandPalette } from "./CommandPalette";
 import { FilterRail } from "./FilterRail";
 import "./Shell.css";
 
@@ -18,8 +15,6 @@ const NAV = [
 
 export function Shell() {
   const health = useAsync(() => api.health(), []);
-  const { filters } = useFilters();
-  const [paletteOpen, setPaletteOpen] = useState(false);
   // The console ships dark: the chart palette's dark steps all clear contrast
   // against this surface while three light steps do not. Following the OS by
   // default would hand most readers the weaker palette, so light and system are
@@ -34,19 +29,6 @@ export function Shell() {
     else root.setAttribute("data-theme", theme);
     localStorage.setItem("abcd-theme", theme);
   }, [theme]);
-
-  useEffect(() => {
-    const onKey = (event: KeyboardEvent) => {
-      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
-        event.preventDefault();
-        setPaletteOpen((open) => !open);
-      }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, []);
-
-  const active = countActive(filters);
 
   return (
     <div className="shell">
@@ -66,16 +48,6 @@ export function Shell() {
         </nav>
 
         <div className="shell__meta">
-          <button
-            type="button"
-            className="shell__search"
-            onClick={() => setPaletteOpen(true)}
-          >
-            <span>Filter</span>
-            <kbd>{navigator.platform.startsWith("Mac") ? "⌘" : "Ctrl "}K</kbd>
-            {active > 0 && <span className="shell__count num">{active}</span>}
-          </button>
-
           {health.data && (
             <span
               className="shell__status"
@@ -112,8 +84,6 @@ export function Shell() {
           <Outlet />
         </main>
       </div>
-
-      <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} />
     </div>
   );
 }

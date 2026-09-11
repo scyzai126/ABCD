@@ -19,7 +19,12 @@ export function SliceBar({
   labels,
   scopeNote = "Showing every sample in the database. Use the filters to narrow the slice.",
 }: {
-  labels: { celltypes: Map<number, string>; subjects: Map<number, string>; samples: Map<number, string> };
+  labels: {
+    celltypes: Map<number, string>;
+    subjects: Map<number, string>;
+    samples: Map<number, string>;
+    alleles: Map<number, string>;
+  };
   /** What is on screen before any filter is applied. A study page is already
    *  narrowed to one study, so it must not claim to show everything. */
   scopeNote?: string;
@@ -43,6 +48,12 @@ export function SliceBar({
       "Segment",
       (value) => value,
       (next) => update({ alleleSegment: next }),
+    ),
+    ...listChips(
+      filters.alleleId,
+      "Allele",
+      (value) => labels.alleles.get(value) ?? `#${value}`,
+      (next) => update({ alleleId: next }),
     ),
     ...listChips(
       filters.subjectId,

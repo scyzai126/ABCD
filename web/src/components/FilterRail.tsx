@@ -1,6 +1,6 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { api } from "../api/client";
-import type { FacetAvailability, SampleOverview, SubjectOverview } from "../api/types";
+import type { AlleleInfo, FacetAvailability, SampleOverview, SubjectOverview } from "../api/types";
 import { useAsync } from "../state/useAsync";
 import { useMediaQuery } from "../state/useMediaQuery";
 import { countActive, toggle } from "../state/filters";
@@ -24,6 +24,7 @@ export function FilterRail() {
   const facets = useAsync(() => api.facets(), []);
   const subjects = useAsync(() => api.subjects(), []);
   const samples = useAsync(() => api.samples(), []);
+  const alleles = useAsync(() => api.alleles(), []);
 
   const byField = useMemo(() => {
     const map = new Map<string, FacetAvailability>();
@@ -72,6 +73,18 @@ export function FilterRail() {
           }))}
           selected={filters.alleleSegment}
           onToggle={(id) => update({ alleleSegment: toggle(filters.alleleSegment, id) })}
+        />
+      </Section>
+
+      <Section
+        title="Allele"
+        hint={`${alleles.data?.length ?? 0} germline V and J alleles`}
+        active={filters.alleleId.length}
+      >
+        <AlleleSearch
+          alleles={alleles.data ?? []}
+          selected={filters.alleleId}
+          onToggle={(id) => update({ alleleId: toggle(filters.alleleId, id) })}
         />
       </Section>
 
@@ -234,5 +247,71 @@ function CheckList({
         );
       })}
     </ul>
+  );
+}
+
+/**
+ * The allele picker.
+ *
+ * Three hundred and forty-one values will not fit in a rail as a checkbox list,
+ * and scrolling to IGHV4-38-2*02 is nobody's idea of a filter. A search field
+ * narrows first; selected alleles stay pinned at the top so a choice never
+ * scrolls out of sight while you look for the next one.
+ */
+function AlleleSearch({
+  alleles,
+  selected,
+  onToggle,
+}: {
+  alleles: AlleleInfo[];
+  selected: number[];
+  onToggle: (id: number) => void;
+}) {
+  const [term, setTerm] = useState("");
+
+  const shown = useMemo(() => {
+    const needle = term.trim().toLowerCase();
+    const matches = needle
+      ? alleles.filter(
+          (a) =>
+            a.vj_allele_name.toLowerCase().includes(needle) ||
+            (a.vj_allele_segment ?? "").toLowerCase().includes(needle),
+        )
+      : alleles;
+    const picked = matches.filter((a) => selected.includes(a.vj_allele_id));
+    const rest = matches.filter((a) => !selected.includes(a.vj_allele_id));
+    // The list arrives ordered by usage, so the untyped view leads with the
+    // alleles anyone is most likely to want.
+    return [...picked, ...rest].slice(0, 60);
+  }, [alleles, term, selected]);
+
+  if (alleles.length === 0) {
+    return <p className="rail__empty">Loading…</p>;
+  }
+
+  return (
+    <div className="rail__search">
+      <input
+        type="search"
+        className="rail__search-input"
+        value={term}
+        placeholder="Search alleles, e.g. IGHV1-18"
+        onChange={(event) => setTerm(event.target.value)}
+        aria-label="Search alleles"
+      />
+      <div className="rail__scroll">
+        <CheckList
+          items={shown.map((allele) => ({
+            id: String(allele.vj_allele_id),
+            label: allele.vj_allele_name,
+            count: allele.count_vj_allele,
+            mono: true,
+          }))}
+          selected={selected.map(String)}
+          onToggle={(id) => onToggle(Number(id))}
+        />
+      </div>
+      {shown.length === 0 && <p className="rail__empty">No allele matches that.</p>}
+    </div>
   );
 }

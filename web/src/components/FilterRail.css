@@ -273,3 +273,31 @@
   align-self: flex-start;
   padding: 0 var(--space-2) var(--space-2);
 }
+
+/* Allele search: the one facet too large to browse as a list. */
+.rail__search {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.rail__search-input {
+  font: inherit;
+  font-size: var(--t-small);
+  width: 100%;
+  padding: 5px var(--space-2);
+  color: var(--ink);
+  background: var(--surface-input);
+  border: 1px solid transparent;
+  border-radius: var(--radius-control);
+  transition: border-color 120ms var(--ease);
+}
+
+.rail__search-input::placeholder {
+  color: var(--ink-muted);
+}
+
+.rail__search-input:hover,
+.rail__search-input:focus {
+  border-color: var(--rule-strong);
+}

@@ -7,6 +7,7 @@ export function useLabels() {
   const facets = useAsync(() => api.facets(), []);
   const subjects = useAsync(() => api.subjects(), []);
   const samples = useAsync(() => api.samples(), []);
+  const alleles = useAsync(() => api.alleles(), []);
 
   return useMemo(() => {
     const celltypes = new Map<number, string>();
@@ -24,6 +25,11 @@ export function useLabels() {
       sampleNames.set(sample.sample_id, sample.sample_name ?? `#${sample.sample_id}`),
     );
 
-    return { celltypes, subjects: subjectNames, samples: sampleNames };
-  }, [facets.data, subjects.data, samples.data]);
+    const alleleNames = new Map<number, string>();
+    alleles.data?.forEach((allele) =>
+      alleleNames.set(allele.vj_allele_id, allele.vj_allele_name),
+    );
+
+    return { celltypes, subjects: subjectNames, samples: sampleNames, alleles: alleleNames };
+  }, [facets.data, subjects.data, samples.data, alleles.data]);
 }
